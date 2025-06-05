@@ -1,18 +1,11 @@
 export default function ImagePopup(props) {
-  // const { handleOpenPopup } = props.card;
+  const { name, link } = props;
   return (
     <>
-      {/*   <div className="popup popup__image popup__image-zoom">
-        <div className="popup"></div> */}
-      <img className="popup__photo" src={props.link} alt="" />
-      <p className="popup__photo-title">{props.name}</p>
-      {/* </div> */}
+      <div className="popup__image">
+        <img className="popup__photo" src={link} alt={name || "Imagen"} />
+        <p className="popup__photo-title">{name}</p>
+      </div>
     </>
   );
 }
-
-/* Crea el componente ImagePopup siguiendo un proceso similar 
-que con el componente Card. Debe recibir una card como props.
-- Pasa handleOpenPopup como props al componente Card.
-- Crea el objeto imageComponenten Card.jsx;
-- Llama a handleOpenPopup(imageComponent) onClick en el elemento img. */

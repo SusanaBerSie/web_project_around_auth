@@ -22,6 +22,13 @@
   height: 100vh;
 }
 
+/* .popup__image {
+  max-width: 50vw;
+  max-height: 50vh;
+  height: auto;
+  width: auto;
+} */
+
 .popup--show {
   pointer-events: auto;
 }
@@ -103,8 +110,10 @@
 }
 
 .popup__photo {
-  /* width: 100%; */
+  width: 100%;
   max-height: 60vh;
+  /* max-width: 100%;
+  object-fit: cover; */
 }
 
 .popup__photo-title {

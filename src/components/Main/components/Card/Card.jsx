@@ -13,10 +13,10 @@ export default function Card(props) {
           alt=""
           className="element__image"
           onClick={() => {
-            handleOpenPopup(name, link);
+            handleOpenPopup(null, name, link);
           }}
         />
-        <button
+        <img
           src="/images/trash.png"
           alt="trash"
           className="element__icon-trash"
@@ -25,7 +25,7 @@ export default function Card(props) {
       </div>
       <div className="element-box">
         <h2 className="element__title">{name}</h2>
-        <button
+        <img
           src="/images/heart.png"
           alt="like"
           className="element__icon-like"

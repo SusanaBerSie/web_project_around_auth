@@ -31,7 +31,8 @@ console.log(cards);
 export default function Main() {
   const [popup, setPopup] = useState(null);
   const [name, setName] = useState(null);
-  const [link, setLink] = useState(null);
+  const [link, setLink] = useState();
+
   const newCardPopup = { title: "Nuevo lugar", children: <NewCard /> };
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
@@ -41,16 +42,26 @@ export default function Main() {
     title: "Editar perfil",
     children: <EditProfile />,
   };
+
   const imageComponent = { children: <ImagePopup name={name} link={link} /> };
 
-  function handleOpenPopup(popup, name, link) {
-    setPopup(popup);
-    setName(name);
-    setLink(link);
+  function handleOpenPopup(popup, imageName, imageLink) {
+    if (imageName && imageLink) {
+      setName(imageName);
+      setLink(imageLink);
+      const updatedImageComponent = {
+        children: <ImagePopup name={imageName} link={imageLink} />,
+      };
+      setPopup(updatedImageComponent);
+    } else {
+      setPopup(popup);
+    }
   }
 
   function handleClosePopup() {
     setPopup(null);
+    setName(null);
+    setLink(null);
   }
 
   return (
@@ -93,8 +104,8 @@ export default function Main() {
           <Card
             key={card._id}
             card={card}
-            handleOpenPopup={(name, link) =>
-              handleOpenPopup(imageComponent, name, link)
+            handleOpenPopup={() =>
+              handleOpenPopup(imageComponent, card.name, card.link)
             }
           />
         ))}

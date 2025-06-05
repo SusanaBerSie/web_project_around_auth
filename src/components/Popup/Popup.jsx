@@ -4,7 +4,7 @@ export default function Popup(props) {
     <>
       <div className="popup__overlay"></div>
       <div className="popup">
-        <div className={'popup_profile ${!title ? "element__image" : ""}'}>
+        <div className={` ${!title ? "" : "popup_profile"}`}>
           <button
             className="popup__X-button"
             aria-label="Close modal"
@@ -13,7 +13,7 @@ export default function Popup(props) {
           >
             X
           </button>
-          <div className="popup__container">
+          <div className={` ${!title ? "" : "popup__container"}`}>
             {title && <h2 className="popup__title">{title}</h2>}
             {children}
           </div>
