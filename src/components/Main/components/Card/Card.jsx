@@ -1,9 +1,21 @@
 import { Children } from "react";
-//import ImagePopup from "../../../Form/ImagePopup/ImagePopup";
+import likeIcon from "../../../../images/heart.png";
+import trashIcon from "../../../../images/trash.png";
 
 export default function Card(props) {
   const { name, link, isLiked } = props.card;
-  const { handleOpenPopup } = props;
+  const { handleOpenPopup, onCardLike, onCardDelete } = props;
+
+  const cardLikeButtonClassName = `element__icon-like ${
+    isLiked ? "element__icon-like_active" : ""
+  }`;
+  function handleLikeClick() {
+    onCardLike(props.card);
+  }
+
+  function handleDeleteClick() {
+    onCardDelete(props.card);
+  }
 
   return (
     <div className="element">
@@ -17,19 +29,19 @@ export default function Card(props) {
           }}
         />
         <img
-          src="/images/trash.png"
+          src={trashIcon}
           alt="trash"
           className="element__icon-trash"
-          type="button"
+          onClick={handleDeleteClick}
         />
       </div>
       <div className="element-box">
         <h2 className="element__title">{name}</h2>
         <img
-          src="/images/heart.png"
+          src={likeIcon}
           alt="like"
-          className="element__icon-like"
-          type="button"
+          className={cardLikeButtonClassName}
+          onClick={handleLikeClick}
         />
       </div>
     </div>

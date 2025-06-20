@@ -1,4 +1,14 @@
-export default function NewCard() {
+import { useState } from "react";
+
+export default function NewCard({ onAddCard }) {
+  const [name, setName] = useState("");
+  const [link, setLink] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onAddCard(name, link);
+  }
+
   return (
     <>
       <form
@@ -6,6 +16,7 @@ export default function NewCard() {
         name="form-card"
         id="new-card-form"
         noValidate
+        onSubmit={handleSubmit}
       >
         <fieldset className="popup__fieldset">
           <input
@@ -17,6 +28,8 @@ export default function NewCard() {
             placeholder="Title"
             minLength="2"
             maxLength="30"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <span className="input__error" id="card-name-error"></span>
         </fieldset>
@@ -28,6 +41,8 @@ export default function NewCard() {
             id="photoUrlInput"
             name="url"
             placeholder="URL de la foto"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
           />
           <span className="input__error" id="card-link-error"></span>
         </fieldset>

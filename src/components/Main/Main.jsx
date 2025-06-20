@@ -1,46 +1,29 @@
-import avatarImage from "../../images/avatar.jpg";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import NewCard from "../Form/NewCard/NewCard";
 import EditAvatar from "../Form/EditAvatar/EditAvatar";
 import EditProfile from "../Form/EditProfile/EditProfile";
 import Popup from "../Popup/Popup";
 import Card from "./components/Card/Card";
 import ImagePopup from "../Form/ImagePopup/ImagePopup";
+import { api } from "../../utils/api.js";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
-const cards = [
-  {
-    isLiked: false,
-    _id: "5d1f0611d321eb4bdcd707dd",
-    name: "Yosemite Valley",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:10:57.741Z",
-  },
-  {
-    isLiked: false,
-    _id: "5d1f064ed321eb4bdcd707de",
-    name: "Lake Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:11:58.324Z",
-  },
-];
-
-console.log(cards);
-
-export default function Main() {
+export default function Main(props) {
   const [popup, setPopup] = useState(null);
   const [name, setName] = useState(null);
   const [link, setLink] = useState();
 
-  const newCardPopup = { title: "Nuevo lugar", children: <NewCard /> };
+  const newCardPopup = {
+    title: "Nuevo lugar",
+    children: <NewCard onAddCard={handleAddCard} />,
+  };
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
-    children: <EditAvatar />,
+    children: <EditAvatar onUpdateAvatar={handleEditAvatar} />,
   };
   const editProfilePopup = {
     title: "Editar perfil",
-    children: <EditProfile />,
+    children: <EditProfile onProfileSubmit={handleProfileSubmit} />,
   };
 
   const imageComponent = { children: <ImagePopup name={name} link={link} /> };
@@ -64,6 +47,36 @@ export default function Main() {
     setLink(null);
   }
 
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+
+  async function handleAddCard(name, link) {
+    await props.onAddCard(name, link);
+    handleClosePopup();
+  }
+
+  async function handleProfileSubmit(name, description) {
+    await api
+      .editProfile(name, description)
+      .then((res) => {
+        setCurrentUser(res);
+        handleClosePopup();
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el perfil:", error);
+      });
+  }
+
+  async function handleEditAvatar(avatar) {
+    await api
+      .switchPhotoProfile(avatar)
+      .then((res) => {
+        setCurrentUser(res);
+        handleClosePopup();
+      })
+      .catch((error) => {
+        console.error("Error al actualizar foto de perfil:", error);
+      });
+  }
   return (
     <main className="content">
       <section className="profile">
@@ -72,16 +85,12 @@ export default function Main() {
             className="profile__avatar"
             onClick={() => handleOpenPopup(editAvatarPopup)}
           >
-            <img
-              className="profile__avatar-photo"
-              src={avatarImage}
-              alt="Avatar"
-            />
+            <img className="profile__avatar-photo" src={currentUser.avatar} />
           </div>
           <div className="profile__box">
             <div className="profile__info">
-              <h1 className="profile__info-name">Jacques Cousteau</h1>
-              <h2 className="profile__info-subtitle">Explorador</h2>
+              <h1 className="profile__info-name"> {currentUser.name} </h1>
+              <h2 className="profile__info-subtitle">{currentUser.about}</h2>
             </div>
             <button
               className="profile__info-edit"
@@ -100,15 +109,18 @@ export default function Main() {
         ></button>
       </section>
       <section className="elements">
-        {cards.map((card) => (
-          <Card
-            key={card._id}
-            card={card}
-            handleOpenPopup={() =>
-              handleOpenPopup(imageComponent, card.name, card.link)
-            }
-          />
-        ))}
+        {props &&
+          props.cards.map((card) => (
+            <Card
+              key={card._id}
+              card={card}
+              handleOpenPopup={() =>
+                handleOpenPopup(imageComponent, card.name, card.link)
+              }
+              onCardLike={props.onCardLike}
+              onCardDelete={props.onCardDelete}
+            />
+          ))}
       </section>
       {popup && (
         <Popup onClose={handleClosePopup} title={popup.title}>
