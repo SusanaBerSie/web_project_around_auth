@@ -1,12 +1,17 @@
-# React + Vite
+# ¿Qué es web_project_around_react?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una red social cuyo objetivo es recorrer Estados Unidos mediante fotografías representativas de sus bellezas naturales más atractivas.
 
-Currently, two official plugins are available:
+# ¿Cómo usar web_project_around?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+En la página el usuario puede crear su perfil agregando una foto y su nombre, además puede agregar forografías de paisajes icónicos y dar ''like'' a las mejores.
 
-## Expanding the ESLint configuration
+# Tecnologías usadas
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- CSS
+- HTML
+- Java Script
+
+# Link de acceso
+
+https://susanabersie.github.io/web_project_around/

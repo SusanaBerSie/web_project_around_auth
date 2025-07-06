@@ -1,4 +1,3 @@
-import { Children } from "react";
 import likeIcon from "../../../../images/heart.png";
 import trashIcon from "../../../../images/trash.png";
 

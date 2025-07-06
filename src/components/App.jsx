@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
@@ -6,9 +6,7 @@ import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [currentUser, setCurrentUser] = useState({});
-  const [userAvatar, setUserAvatar] = useState();
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
