@@ -19,7 +19,7 @@ export default function Main(props) {
   };
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
-    children: <EditAvatar onUpdateAvatar={handleEditAvatar} />,
+    children: <EditAvatar handleUpdateUser={handleEditAvatar} />,
   };
   const editProfilePopup = {
     title: "Editar perfil",

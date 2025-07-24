@@ -1,13 +1,13 @@
 import { useRef } from "react";
 
 export default function EditAvatar(props) {
-  const { onUpdateAvatar } = props;
+  const { handleUpdateUser } = props;
   const avatarRef = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
     const avatar = avatarRef.current.value;
-    onUpdateAvatar(avatar);
+    handleUpdateUser(avatar);
   }
   return (
     <>
