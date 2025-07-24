@@ -26,6 +26,29 @@ function App() {
       });
   }, []);
 
+  async function handleUpdateAvatar(avatar) {
+    await api
+      .switchPhotoProfile(avatar)
+      .then((res) => {
+        setCurrentUser(res);
+        handleClosePopup();
+      })
+      .catch((error) => {
+        console.error("Error al actualizar foto de perfil:", error);
+      });
+  }
+
+  async function handleUpdateUser(name, description) {
+    await api
+      .editProfile(name, description)
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((error) => {
+        console.error("Error al actualizar el perfil:", error);
+      });
+  }
+
   async function handleCardLike(card) {
     const isLiked = card.isLiked;
     await api
@@ -65,7 +88,14 @@ function App() {
   }
 
   return (
-    <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+    <CurrentUserContext.Provider
+      value={{
+        currentUser,
+        setCurrentUser,
+        handleUpdateUser,
+        handleUpdateAvatar,
+      }}
+    >
       <>
         <Header />
         <Main

@@ -77,7 +77,6 @@ class Api {
         authorization: this.token,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({}),
     }).then((res) => {
       if (res.ok) {
         return res.json();

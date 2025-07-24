@@ -1,8 +1,30 @@
+import { useEffect } from "react";
+
 export default function Popup(props) {
   const { onClose, title, children } = props;
+
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [onClose]);
+
+  const handleOverlayClick = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
     <>
-      <div className="popup__overlay"></div>
+      <div className="popup__overlay" onClick={handleOverlayClick}></div>
       <div className="popup">
         <div className={` ${!title ? "" : "popup_profile"}`}>
           <button

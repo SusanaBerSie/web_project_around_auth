@@ -19,11 +19,11 @@ export default function Main(props) {
   };
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
-    children: <EditAvatar handleUpdateUser={handleEditAvatar} />,
+    children: <EditAvatar />,
   };
   const editProfilePopup = {
     title: "Editar perfil",
-    children: <EditProfile onProfileSubmit={handleProfileSubmit} />,
+    children: <EditProfile handleClosePopup={handleClosePopup} />,
   };
 
   const imageComponent = { children: <ImagePopup name={name} link={link} /> };
@@ -54,29 +54,6 @@ export default function Main(props) {
     handleClosePopup();
   }
 
-  async function handleProfileSubmit(name, description) {
-    await api
-      .editProfile(name, description)
-      .then((res) => {
-        setCurrentUser(res);
-        handleClosePopup();
-      })
-      .catch((error) => {
-        console.error("Error al actualizar el perfil:", error);
-      });
-  }
-
-  async function handleEditAvatar(avatar) {
-    await api
-      .switchPhotoProfile(avatar)
-      .then((res) => {
-        setCurrentUser(res);
-        handleClosePopup();
-      })
-      .catch((error) => {
-        console.error("Error al actualizar foto de perfil:", error);
-      });
-  }
   return (
     <main className="content">
       <section className="profile">

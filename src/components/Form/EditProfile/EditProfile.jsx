@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 export default function EditProfile(props) {
-  const { onProfileSubmit } = props;
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const { currentUser, handleUpdateUser } = useContext(CurrentUserContext);
+  const [name, setName] = useState(currentUser.name);
+  const [description, setDescription] = useState(currentUser.about);
+  const { handleClosePopup } = props;
 
   function handleSubmit(e) {
     e.preventDefault();
-    onProfileSubmit(name, description);
+    handleUpdateUser(name, description);
+    handleClosePopup();
   }
 
   return (
