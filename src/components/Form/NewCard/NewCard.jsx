@@ -6,6 +6,17 @@ export default function NewCard({ onAddCard }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!name || !link) {
+      alert("Campo requerido");
+      return;
+    }
+
+    const urlRegex =
+      /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+    if (!urlRegex.test(link)) {
+      alert("La URL no es válida");
+      return;
+    }
     onAddCard(name, link);
   }
 
