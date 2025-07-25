@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 export default function NewCard({ onAddCard }) {
+  const { handleAddCard } = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
@@ -16,7 +18,7 @@ export default function NewCard({ onAddCard }) {
       alert("La URL no es válida");
       return;
     }
-    onAddCard(name, link);
+    handleAddCard(name, link);
   }
 
   return (

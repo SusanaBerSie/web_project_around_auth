@@ -4,10 +4,15 @@ import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
 import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Popup from "./Popup/Popup";
+import ImagePopup from "./Form/ImagePopup/ImagePopup";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [popup, setPopup] = useState(null);
+  const [, setName] = useState(null);
+  const [, setLink] = useState();
 
   useEffect(() => {
     api.getUserInfo().then((res) => {
@@ -43,6 +48,7 @@ function App() {
       .editProfile(name, description)
       .then((res) => {
         setCurrentUser(res);
+        handleClosePopup();
       })
       .catch((error) => {
         console.error("Error al actualizar el perfil:", error);
@@ -81,10 +87,31 @@ function App() {
       .addNewCard(name, link)
       .then((newCard) => {
         setCards((prevCards) => [newCard, ...prevCards]);
+        handleClosePopup();
       })
       .catch((error) => {
         console.error("Error al añadir tarjeta:", error);
       });
+  }
+
+  function handleOpenPopup(popup, imageName, imageLink) {
+    console.log(popup);
+    if (imageName && imageLink) {
+      setName(imageName);
+      setLink(imageLink);
+      const updatedImageComponent = {
+        children: <ImagePopup name={imageName} link={imageLink} />,
+      };
+      setPopup(updatedImageComponent);
+    } else {
+      setPopup(popup);
+    }
+  }
+
+  function handleClosePopup() {
+    setPopup(null);
+    setName(null);
+    setLink(null);
   }
 
   return (
@@ -94,6 +121,7 @@ function App() {
         setCurrentUser,
         handleUpdateUser,
         handleUpdateAvatar,
+        handleAddCard,
       }}
     >
       <>
@@ -103,8 +131,14 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           onAddCard={handleAddCard}
+          handleOpenPopup={handleOpenPopup}
         />
         <Footer />
+        {popup && (
+          <Popup onClose={handleClosePopup} title={popup.title}>
+            {popup.children}
+          </Popup>
+        )}
       </>
     </CurrentUserContext.Provider>
   );

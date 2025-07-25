@@ -5,12 +5,10 @@ export default function EditProfile(props) {
   const { currentUser, handleUpdateUser } = useContext(CurrentUserContext);
   const [name, setName] = useState(currentUser.name);
   const [description, setDescription] = useState(currentUser.about);
-  const { handleClosePopup } = props;
 
   function handleSubmit(e) {
     e.preventDefault();
     handleUpdateUser(name, description);
-    handleClosePopup();
   }
 
   return (

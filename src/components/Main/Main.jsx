@@ -1,21 +1,18 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import NewCard from "../Form/NewCard/NewCard";
 import EditAvatar from "../Form/EditAvatar/EditAvatar";
 import EditProfile from "../Form/EditProfile/EditProfile";
-import Popup from "../Popup/Popup";
 import Card from "./components/Card/Card";
 import ImagePopup from "../Form/ImagePopup/ImagePopup";
-import { api } from "../../utils/api.js";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
 export default function Main(props) {
-  const [popup, setPopup] = useState(null);
-  const [name, setName] = useState(null);
-  const [link, setLink] = useState();
+  const { currentUser } = useContext(CurrentUserContext);
+  const { handleOpenPopup } = props;
 
   const newCardPopup = {
     title: "Nuevo lugar",
-    children: <NewCard onAddCard={handleAddCard} />,
+    children: <NewCard />,
   };
   const editAvatarPopup = {
     title: "Cambiar foto de perfil",
@@ -23,36 +20,10 @@ export default function Main(props) {
   };
   const editProfilePopup = {
     title: "Editar perfil",
-    children: <EditProfile handleClosePopup={handleClosePopup} />,
+    children: <EditProfile />,
   };
 
-  const imageComponent = { children: <ImagePopup name={name} link={link} /> };
-
-  function handleOpenPopup(popup, imageName, imageLink) {
-    if (imageName && imageLink) {
-      setName(imageName);
-      setLink(imageLink);
-      const updatedImageComponent = {
-        children: <ImagePopup name={imageName} link={imageLink} />,
-      };
-      setPopup(updatedImageComponent);
-    } else {
-      setPopup(popup);
-    }
-  }
-
-  function handleClosePopup() {
-    setPopup(null);
-    setName(null);
-    setLink(null);
-  }
-
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-
-  async function handleAddCard(name, link) {
-    await props.onAddCard(name, link);
-    handleClosePopup();
-  }
+  const imageComponent = { children: <ImagePopup /> };
 
   return (
     <main className="content">
@@ -99,11 +70,6 @@ export default function Main(props) {
             />
           ))}
       </section>
-      {popup && (
-        <Popup onClose={handleClosePopup} title={popup.title}>
-          {popup.children}
-        </Popup>
-      )}
     </main>
   );
 }
