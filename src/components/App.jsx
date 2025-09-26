@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import {
+  Routes,
+  Route,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
@@ -6,13 +13,20 @@ import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Popup from "./Popup/Popup";
 import ImagePopup from "./Form/ImagePopup/ImagePopup";
+import ProtectedRoute from "./ProtectedRoute";
+import * as auth from "./auth";
+import Login from "./Login/Login";
+import Register from "./Register/Register";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const [, setName] = useState(null);
   const [, setLink] = useState();
+
+  const location = useLocation();
 
   useEffect(() => {
     api.getUserInfo().then((res) => {
@@ -31,7 +45,14 @@ function App() {
       });
   }, []);
 
-  async function handleUpdateAvatar(avatar) {
+  const handleLogin = ({ email, password }) => {
+    if (!email || !password) {
+      return;
+    }
+    auth.loginUser(email, password);
+  };
+
+  const handleUpdateAvatar = async function (avatar) {
     await api
       .switchPhotoProfile(avatar)
       .then((res) => {
@@ -41,7 +62,7 @@ function App() {
       .catch((error) => {
         console.error("Error al actualizar foto de perfil:", error);
       });
-  }
+  };
 
   async function handleUpdateUser(name, description) {
     await api
@@ -124,22 +145,35 @@ function App() {
         handleAddCard,
       }}
     >
-      <>
-        <Header />
-        <Main
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          onAddCard={handleAddCard}
-          handleOpenPopup={handleOpenPopup}
-        />
-        <Footer />
-        {popup && (
-          <Popup onClose={handleClosePopup} title={popup.title}>
-            {popup.children}
-          </Popup>
-        )}
-      </>
+      <Header />
+      <Routes>
+        <Route path="/signup" element={<Register />} />
+        <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+        <Route path="/" element={<ProtectedRoute isLoggedIn={false} />}>
+          <Route
+            path="/"
+            element={
+              <>
+                <Main
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  onAddCard={handleAddCard}
+                  handleOpenPopup={handleOpenPopup}
+                />
+
+                {popup && (
+                  <Popup onClose={handleClosePopup} title={popup.title}>
+                    {popup.children}
+                  </Popup>
+                )}
+              </>
+            }
+          />
+        </Route>
+        <Route path="*" element={<div>Página no encontrada</div>} />
+      </Routes>
+      <Footer />
     </CurrentUserContext.Provider>
   );
 }

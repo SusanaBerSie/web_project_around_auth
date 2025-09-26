@@ -2,12 +2,19 @@
   width: 880px;
   border-bottom: solid 1px;
   color: #545454;
+  display: flex;
 }
 
 .header__logo {
   width: 173px;
   height: 33px;
-  padding: 45px 707px 41px 0px;
+  padding: 45px 0px 41px 200px;
+}
+
+.header__link {
+  height: 22px;
+  color: white;
+  text-decoration: none;
 }
 
 @media screen and (max-width: 880px) and (min-width: 544px) {

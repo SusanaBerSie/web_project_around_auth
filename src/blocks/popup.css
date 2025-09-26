@@ -22,13 +22,6 @@
   height: 100vh;
 }
 
-/* .popup__image {
-  max-width: 50vw;
-  max-height: 50vh;
-  height: auto;
-  width: auto;
-} */
-
 .popup--show {
   pointer-events: auto;
 }
