@@ -1,9 +1,7 @@
 import React from "react";
 import "../blocks/InfoTooltip.css";
-//import successLogo from "../../images/success.png";
-//import failLogo from "../../images/fail.png";
 
-export default function InfoTooltip(props) {
+export default function InfoTooltip({ message, logo, onClose }) {
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -13,18 +11,22 @@ export default function InfoTooltip(props) {
   return (
     <>
       <div className="popup__overlay" onClick={handleOverlayClick}></div>
-      <div className="pops">
+      <div className="toolTip">
         <button
           className="popup__X-button"
           aria-label="Close modal"
           type="button"
-          /* onClick={onClose} */
+          onClick={onClose}
         >
           X
         </button>
-        <div className="pops__container">
-          <img src={props.logo} className="pops__success-logo"></img>
-          <p className="pops__success-letter">{props.message}</p>
+        <div className="toolTip__container">
+          <img
+            src={logo}
+            className="toolTip__success-logo"
+            alt={message.includes("correcto" ? "Éxito" : "Error")}
+          ></img>
+          <p className="toolTip__success-letter">{message}</p>
         </div>
       </div>
     </>

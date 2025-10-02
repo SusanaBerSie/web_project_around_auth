@@ -1,7 +1,5 @@
 .popup {
   position: fixed;
-  /*visibility: hidden;
-  opacity: 0;*/
   transition: 500ms ease;
   display: flex;
   flex-direction: column;
@@ -34,6 +32,10 @@
   z-index: 1;
   font-size: 30px;
   background-color: transparent;
+}
+
+.popup__X-button:hover {
+  opacity: 0.6;
 }
 
 .popup_opened {
@@ -105,8 +107,6 @@
 .popup__photo {
   width: 100%;
   max-height: 60vh;
-  /* max-width: 100%;
-  object-fit: cover; */
 }
 
 .popup__photo-title {

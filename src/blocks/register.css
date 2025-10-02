@@ -40,8 +40,8 @@
 
 .register__form {
   background-color: black;
-  /* box-shadow: 0 0 0 40px #000 inset !important; */
   color: white;
+  -webkit-text-fill-color: white;
 }
 
 .register__input::placeholder {
@@ -50,7 +50,7 @@
 
 .register__button {
   border: none;
-  margin: 216px 0px 14px;
+  margin: 190px 0px 14px;
   padding: 0px;
 }
 
@@ -68,6 +68,10 @@
   cursor: pointer;
 }
 
+.register__button-item:hover {
+  opacity: 0.6;
+}
+
 .register__signup {
   display: flex;
   flex-direction: row;
@@ -75,6 +79,10 @@
   font-size: 14px;
   font-weight: 400;
   gap: 5px;
+}
+
+.register__signup:hover {
+  opacity: 0.6;
 }
 
 .register__signup-letter {
@@ -98,4 +106,53 @@
 .input__error {
   color: red;
   font-size: 12px;
+}
+
+input.register__form:-webkit-autofill,
+input.register__form:-webkit-autofill:hover,
+input.register__form:-webkit-autofill:focus,
+input.register__form:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+  -webkit-text-fill-color: white !important;
+  border-bottom: solid 1px #c4c4c4 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input#passwordInput {
+  border-bottom: solid 1px #c4c4c4 !important;
+}
+
+input#passwordInput:-webkit-autofill {
+  border-bottom: solid 1px #c4c4c4 !important;
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+}
+
+input#emailInput {
+  border-bottom: solid 1px #c4c4c4 !important;
+}
+
+input#emailInput:-webkit-autofill {
+  border-bottom: solid 1px #c4c4c4 !important;
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+}
+
+@media screen and (max-width: 544px) {
+  .register {
+    width: 260px;
+  }
+
+  .register__title {
+    font-size: 20px;
+    margin: 40px 30px;
+    max-width: 260px;
+  }
+
+  .register__form:autofill {
+    width: 260px;
+  }
+
+  .register__button-item {
+    width: 260px;
+    height: 46px;
+  }
 }

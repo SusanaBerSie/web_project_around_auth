@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
@@ -14,9 +8,12 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Popup from "./Popup/Popup";
 import ImagePopup from "./Form/ImagePopup/ImagePopup";
 import ProtectedRoute from "./ProtectedRoute";
-import * as auth from "./auth";
+import * as auth from "../utils/auth";
 import Login from "./Login/Login";
 import Register from "./Register/Register";
+import successLogo from "../images/success.png";
+import failLogo from "../images/fail.png";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -25,31 +22,128 @@ function App() {
   const [popup, setPopup] = useState(null);
   const [, setName] = useState(null);
   const [, setLink] = useState();
+  const [toolTip, setToolTip] = useState({
+    isOpen: false,
+    isSuccess: false,
+    message: "",
+    logo: "",
+  });
 
-  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    api.getUserInfo().then((res) => {
-      setCurrentUser(res);
-    });
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if (token) {
+      auth
+        .checkToken(token)
+        .then((res) => {
+          setIsLoggedIn(true);
+          setCurrentUser({ ...currentUser, email: res.data.email });
+          navigate("/");
+        })
+        .catch(() => {
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+        });
+    }
   }, []);
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        setCards(res);
-      })
-      .catch((error) => {
-        console.error("Error al cargar las tarjetas:", error);
+    if (isLoggedIn) {
+      api.getUserInfo().then((res) => {
+        setCurrentUser({
+          ...currentUser,
+          name: res.name,
+          about: res.about,
+          _id: res._id,
+          avatar: res.avatar,
+        });
+        console.log(res);
       });
-  }, []);
+      api
+        .getInitialCards()
+        .then((res) => {
+          console.log(res);
+          setCards(res);
+        })
+        .catch((error) => {
+          console.error("Error al cargar las tarjetas:", error);
+        });
+    }
+  }, [isLoggedIn]);
 
-  const handleLogin = ({ email, password }) => {
+  /*  useEffect(() => {
+    const handleEscapeKey = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  },[]); */
+
+  const handleLogin = async ({ email, password }) => {
     if (!email || !password) {
       return;
     }
-    auth.loginUser(email, password);
+    try {
+      const data = await auth.loginUser(email, password);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setIsLoggedIn(true);
+        setCurrentUser(data.user || {});
+        navigate("/");
+        setToolTip({
+          isOpen: true,
+          isSuccess: true,
+          message: "¡Correcto! Ya estás registrado.",
+          logo: successLogo,
+        });
+      }
+    } catch (error) {
+      console.error("Error en login", error);
+      setToolTip({
+        isOpen: true,
+        isSuccess: false,
+        message: "Uy, algo salió mal. Por favor, inténtalo de nuevo.",
+        logo: failLogo,
+      });
+    }
+  };
+
+  const handleRegister = async ({ email, password }) => {
+    console.log(email, password);
+    if (!email || !password) {
+      return;
+    }
+    try {
+      await auth.registerUser(email, password);
+      setToolTip({
+        isOpen: true,
+        isSuccess: true,
+        message: "¡Correcto! Ya estás registrado.",
+        logo: successLogo,
+      });
+    } catch (error) {
+      console.error("Error en registro", error);
+      setToolTip({
+        isOpen: true,
+        isSuccess: false,
+        message: "Uy, algo salió mal. Por favor, inténtalo de nuevo.",
+        logo: failLogo,
+      });
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setCurrentUser({});
+    setCards([]);
+    navigate("/signin");
   };
 
   const handleUpdateAvatar = async function (avatar) {
@@ -135,6 +229,15 @@ function App() {
     setLink(null);
   }
 
+  const handleCloseToolTip = () => {
+    setToolTip({
+      isOpen: false,
+      isSuccess: false,
+      message: "",
+      logo: "",
+    });
+  };
+
   return (
     <CurrentUserContext.Provider
       value={{
@@ -143,16 +246,25 @@ function App() {
         handleUpdateUser,
         handleUpdateAvatar,
         handleAddCard,
+        handleLogout,
+        isLoggedIn,
       }}
     >
-      <Header />
+      <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
-        <Route path="/signup" element={<Register />} />
-        <Route path="/login" element={<Login handleLogin={handleLogin} />} />
-        <Route path="/" element={<ProtectedRoute isLoggedIn={false} />}>
-          <Route
-            path="/"
-            element={
+        <Route
+          path="/signup"
+          element={<Register handleRegister={handleRegister} />}
+        />
+        <Route
+          exact
+          path="/signin"
+          element={<Login handleLogin={handleLogin} />}
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
               <>
                 <Main
                   cards={cards}
@@ -168,11 +280,18 @@ function App() {
                   </Popup>
                 )}
               </>
-            }
-          />
-        </Route>
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<div>Página no encontrada</div>} />
       </Routes>
+      {toolTip.isOpen && (
+        <InfoTooltip
+          message={toolTip.message}
+          logo={toolTip.logo}
+          onClose={handleCloseToolTip}
+        />
+      )}
       <Footer />
     </CurrentUserContext.Provider>
   );

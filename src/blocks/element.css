@@ -41,6 +41,7 @@
 }
 
 .element__icon-trash {
+  background-image: url(../images/trash.png);
   position: absolute;
   right: 20px;
   top: 20px;
@@ -48,10 +49,15 @@
   height: 20px;
 }
 
+.element__icon-trash:hover {
+  /* background-image: url(../images/trash_hover.png); */
+  opacity: 0.6;
+}
+
 .element__icon-like_active {
   background-image: url(../images/black_heart.png);
 }
 
 .element__icon-like:hover {
-  background-image: url(../images/black_heart.png);
+  background-image: url(../images/heart_hover.png);
 }

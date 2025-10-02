@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "../Header/Header";
 import { Link } from "react-router-dom";
-import { loginUser } from "../auth";
+import { loginUser } from "../../utils/auth";
 
 export default function Login({ handleLogin }) {
   const [email, setEmail] = useState("");

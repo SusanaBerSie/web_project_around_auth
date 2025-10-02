@@ -25,11 +25,11 @@ Construido con las herramientas más modernas del desarrollo web:
 
 - Instalación Rápida
   bash# Clona el repositorio
-  git clone git@github.com:SusanaBerSie/web_project_around_react.git
+  git clone git@github.com:SusanaBerSie/web_project_around_auth.git
 
 - Navega al directorio
 
-cd web_project_around_react
+cd web_project_around_auth
 
 - Instala las dependencias
 

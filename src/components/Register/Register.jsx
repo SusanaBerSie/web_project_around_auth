@@ -1,13 +1,11 @@
 import { useState } from "react";
 import Header from "../Header/Header";
 import { Link } from "react-router-dom";
-import { registerUser } from "../auth";
-import InfoTooltip from "../InfoTooltip";
-import successLogo from "../../images/success.png";
-import failLogo from "../../images/fail.png";
+import { registerUser } from "../../utils/auth";
 
 export default function Register({ handleRegister }) {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -23,19 +21,11 @@ export default function Register({ handleRegister }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    registerUser(email, password);
+    handleRegister(data);
   };
-
-  const toolTipMessage = true
-    ? "¡Correcto! Ya estás registrado."
-    : "Uy, algo salió mal. Por favor, inténtalo de nuevo.";
-
-  const toolTipLogo = true ? successLogo : failLogo;
 
   return (
     <div>
-      <InfoTooltip message={toolTipMessage} />
-      <InfoTooltip src={toolTipLogo} />
       <div className="register">
         <form noValidate onSubmit={handleSubmit}>
           <p className="register__title">Regístrate</p>
@@ -50,7 +40,7 @@ export default function Register({ handleRegister }) {
               minLength="2"
               maxLength="40"
               value={data.email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => handleChange(e)}
             />
             <span className="input__error emailInput-error"></span>
             <input
@@ -63,7 +53,7 @@ export default function Register({ handleRegister }) {
               minLength="2"
               maxLength="200"
               value={data.password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handleChange(e)}
             />
             <span className="input__error passwordInput-error"> </span>
           </fieldset>
@@ -76,7 +66,7 @@ export default function Register({ handleRegister }) {
 
         <div className="register__signup">
           <p className="register__signup-letter">¿Ya eres miembro?</p>
-          <Link to="/login" className="register__signup-link">
+          <Link to="/signin" className="register__signup-link">
             Inicia sesión aquí
           </Link>
         </div>

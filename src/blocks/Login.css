@@ -36,6 +36,8 @@
   width: 358px;
   height: 27px;
   background-color: black;
+  color: white;
+  -webkit-text-fill-color: white;
 }
 
 .login__input::placeholder {
@@ -62,6 +64,10 @@
   cursor: pointer;
 }
 
+.login__button-item:hover {
+  opacity: 0.6;
+}
+
 .login__signin {
   display: flex;
   flex-direction: row;
@@ -69,6 +75,10 @@
   font-size: 14px;
   font-weight: 400;
   gap: 5px;
+}
+
+.login__signin:hover {
+  opacity: 0.6;
 }
 
 .login__signin-letter {
@@ -92,4 +102,53 @@
 .input__error {
   color: red;
   font-size: 12px;
+}
+
+.login__form:-webkit-autofill,
+.login__form:-webkit-autofill:hover,
+.login__form:-webkit-autofill:focus,
+.login__form:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+  -webkit-text-fill-color: white !important;
+  border-bottom: solid 1px #c4c4c4 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input#passwordInput {
+  border-bottom: solid 1px #c4c4c4 !important;
+}
+
+input#passwordInput:-webkit-autofill {
+  border-bottom: solid 1px #c4c4c4 !important;
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+}
+
+input#emailInput {
+  border-bottom: solid 1px #c4c4c4 !important;
+}
+
+input#emailInput:-webkit-autofill {
+  border-bottom: solid 1px #c4c4c4 !important;
+  -webkit-box-shadow: 0 0 0 40px #000 inset !important;
+}
+
+@media screen and (max-width: 544px) {
+  .login {
+    width: 260px;
+  }
+
+  .login__title {
+    font-size: 20px;
+    margin: 40px 30px;
+    max-width: 260px;
+  }
+
+  .login__form:autofill {
+    width: 260px;
+  }
+
+  .login__button-item {
+    width: 260px;
+    height: 46px;
+  }
 }

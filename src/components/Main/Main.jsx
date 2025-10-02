@@ -4,7 +4,7 @@ import EditAvatar from "../Form/EditAvatar/EditAvatar";
 import EditProfile from "../Form/EditProfile/EditProfile";
 import Card from "./components/Card/Card";
 import ImagePopup from "../Form/ImagePopup/ImagePopup";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext.jsx";
 
 export default function Main(props) {
   const { currentUser } = useContext(CurrentUserContext);

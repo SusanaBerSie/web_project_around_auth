@@ -3,9 +3,9 @@ import { useContext } from "react";
 
 function ProtectedRoute({ children, isLoggedIn }) {
   if (!isLoggedIn) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/signin" />;
   }
-  return <Outlet />;
+  return <>{children}</>;
 }
 
 export default ProtectedRoute;
